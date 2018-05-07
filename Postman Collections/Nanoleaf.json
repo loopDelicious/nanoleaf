@@ -9,7 +9,7 @@
     {
       "_postman_id": "f7b37c20-37bb-48b1-93e1-13a79f9bcb34",
       "name": "Quickstart: lighting up the Nanoleaf",
-      "description": "In this Postman collection, I added a Quickstart folder to group a handful of requests to demonstrate a possible workflow (visible in the pre-request and test script sections). The remaining folders are replicated from the Nanoleaf Open API Reference.",
+      "description": "In this Postman collection, I added a Quickstart folder to group a handful of requests to demonstrate a possible workflow (visible in the pre-request and test script sections). The remaining folders are replicated from the [Nanoleaf Open API Reference](http://forum.nanoleaf.me/docs/openapi).",
       "item": [
         {
           "_postman_id": "0fe71046-6a4b-46b7-ab05-9ea648b06c89",

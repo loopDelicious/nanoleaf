@@ -1,0 +1,3707 @@
+{
+  "info": {
+    "_postman_id": "4dd99456-8db0-4594-8ddb-c621671c5c78",
+    "name": "Nanoleaf",
+    "description": "From Section 7 of the [Nanoleaf Open API Reference](http://forum.nanoleaf.me/docs/openapi).\n\nRequires setting up a developer account and signing in to their developer portal.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "_postman_id": "f7b37c20-37bb-48b1-93e1-13a79f9bcb34",
+      "name": "Quickstart: lighting up the Nanoleaf",
+      "description": null,
+      "item": [
+        {
+          "_postman_id": "0fe71046-6a4b-46b7-ab05-9ea648b06c89",
+          "name": "Quickstart:  Add a user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "ab8098e5-4e1a-4233-818f-8cd1fecbaee1",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Set auth token\", function () {",
+                  "    ",
+                  "    if (pm.response.to.have.status(200)) {",
+                  "        ",
+                  "        // set the auth token as an environment variable",
+                  "        let token = pm.response.json().auth_token;",
+                  "        pm.environment.set(\"authToken\", token);",
+                  "        ",
+                  "    } else {",
+                  "        ",
+                  "        // log status code and reason, terminate collection run",
+                  "        console.log('Status code: ', pm.response.code);",
+                  "        console.log('Reason: ', pm.response.reason);",
+                  "        postman.setNextRequest(null);",
+                  "        return -1;",
+                  "    }",
+                  "    ",
+                  "});",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": "http://{{ipAddress}}/api/v1/new",
+            "description": "A user is authorized to access the OpenAPI if they can demonstrate physical access of the Light Panels. Generate an authorization token by: \n\n1. Holding the on-off button for 5-7 seconds untl the LED starts flashing in a pattern.\n2. Sending a POST request to the authorization endpoint within 30 seconds of activating pairing, like this (substituting the IP address and port for your central controller):\n\n`http://192.188.x.x:16021/api/v1/new`\n\nThe result returned will be a 32-character authorization token that you will use in all of your subsequent calls.\n\nRefer to Section 6 of the [Nanoleaf Open API Documentation](http://forum.nanoleaf.me/docs/openapi)."
+          },
+          "response": [
+            {
+              "id": "aa363295-74e3-4c4f-8239-807b7741167d",
+              "name": "Add a user",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "http://{{ipAddress}}/api/v1/new"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "49",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"auth_token\":\"zbp3aHIDoj0Ox2iAr857WMFck58mOBaL\"}"
+            }
+          ]
+        },
+        {
+          "_postman_id": "e3c3a502-711a-4cfc-a8b0-1c67402c5ede",
+          "name": "Quickstart: Get all light controller info",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "f93e039f-49bc-47e6-92f9-210cb4942115",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "try {",
+                  "    ",
+                  "    let response = pm.response.json();",
+                  "    ",
+                  "    // if state is off, turn on state, otherwise update the effect",
+                  "    if (!response.state.on.value) {",
+                  "        console.log(\"Nanoleaf is off. Set next request to turn on.\");",
+                  "        postman.setNextRequest(\"Quickstart: Update on/off\");",
+                  "    } else {",
+                  "        console.log(\"Nanoleaf is on. Set next request to list effects.\");",
+                  "        postman.setNextRequest(\"Quickstart: List Effects\");",
+                  "    }",
+                  "    ",
+                  "}",
+                  "catch (e) {",
+                  "    throw (e);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c62543f0-8e2c-48d5-9cbc-98acd5aa220b",
+              "name": "Get all light controller info",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "827",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"name\":\"Nanoleaf Light Panels 52:c4:ce\",\"serialNo\":\"S18122A0754\",\"manufacturer\":\"Nanoleaf\",\"firmwareVersion\":\"2.3.0\",\"model\":\"NL22\",\"state\":{\"on\":{\"value\":true},\"brightness\":{\"value\":100,\"max\":100,\"min\":0},\"hue\":{\"value\":0,\"max\":360,\"min\":0},\"sat\":{\"value\":0,\"max\":100,\"min\":0},\"ct\":{\"value\":4000,\"max\":6500,\"min\":1200},\"colorMode\":\"effect\"},\"effects\":{\"select\":\"Northern Lights\",\"effectsList\":[\"Color Burst\",\"Flames\",\"Forest\",\"Inner Peace\",\"Nemo\",\"Northern Lights\",\"Romantic\",\"Snowfall\"]},\"panelLayout\":{\"layout\":{\"numPanels\":1,\"sideLength\":150,\"positionData\":[{\"panelId\":186,\"x\":-74,\"y\":43,\"o\":180}]},\"globalOrientation\":{\"value\":0,\"max\":360,\"min\":0}},\"rhythm\":{\"rhythmConnected\":false,\"rhythmActive\":null,\"rhythmId\":null,\"hardwareVersion\":null,\"firmwareVersion\":null,\"auxAvailable\":null,\"rhythmMode\":null,\"rhythmPos\":null}}"
+            }
+          ]
+        },
+        {
+          "_postman_id": "0a639f20-2de7-4fcf-8529-5e43b968e34b",
+          "name": "Quickstart: update on/off",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "59f7ef47-7439-4e5e-adb3-6c82cd31c090",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"on\": {\n    \"value\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "95cf7627-5fc2-425f-a7b2-deef07206693",
+              "name": "Quickstart: update on/off",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"on\": {\n    \"value\": true\n  }\n}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        },
+        {
+          "_postman_id": "e5ef5040-dad0-4bbd-b8b4-6bc2a23fe641",
+          "name": "Quickstart: List Effects",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "cf6e3f5b-2288-4f3f-ad43-2bdd67fcf2a1",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Set next Effect\", function () {",
+                  "    ",
+                  "    if (pm.response.to.have.status(200)) {",
+                  "        ",
+                  "        // select random effect, and set as an environment variable",
+                  "        let arrayEffects = pm.response.json();",
+                  "        let indexSelected = Math.floor(Math.random() * arrayEffects.length);",
+                  "        pm.environment.set(\"nextEffect\", arrayEffects[indexSelected]);",
+                  "        ",
+                  "    } else {",
+                  "        ",
+                  "        // log status code and reason, terminate collection run",
+                  "        console.log('Status code: ', pm.response.code);",
+                  "        console.log('Reason: ', pm.response.reason);",
+                  "        postman.setNextRequest(null);",
+                  "        return -1;",
+                  "    }",
+                  "    ",
+                  "});",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects/effectsList",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "effects",
+                "effectsList"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8bbe15a8-88f7-49a4-b739-de1e1e6a21fd",
+              "name": "List",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects/effectsList",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "effects",
+                    "effectsList"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "223",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\"Color Burst\",\"Fireworks\",\"Flames\",\"Forest\",\"Inner Peace\",\"Meteor Shower\",\"Nemo\",\"Northern Lights\",\"Paint Splatter\",\"Pulse Pop Beats\",\"Rhythmic Northern Lights\",\"Ripple\",\"Romantic\",\"Snowfall\",\"Sound Bar\",\"Streaking Notes\"]"
+            }
+          ]
+        },
+        {
+          "_postman_id": "3a5eab0a-4bdf-41dd-b0b8-813d8f66f7d6",
+          "name": "Quickstart: Update Effect",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e173498c-a528-42c5-8106-21e9c0894b4f",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "    console.log(\"Effect updated to: \" + pm.environment.get(\"nextEffect\"));",
+                  "});",
+                  "",
+                  "pm.environment.unset(\"nextEffect\");",
+                  "",
+                  "// terminate collection run",
+                  "postman.setNextRequest(null);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"select\" : \"{{nextEffect}}\"}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "effects"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ba50f090-e94c-4321-88eb-85ec046bbad0",
+              "name": "Select - update",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"select\" : \"Snowfall\"}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "effects"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "7ece8c15-9df0-425e-a420-ec41080e649b",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "fcce4722-6f7e-4ce6-9784-f6f329956582",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "_postman_id": "2bee1873-aedb-4a8f-9353-035e2d9ad584",
+      "name": "Authorization",
+      "description": null,
+      "item": [
+        {
+          "_postman_id": "edd41442-c94f-49dc-977b-8180be92e018",
+          "name": "Add a user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "a86416d9-1760-49e7-a3fe-484e36475957",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Set auth token\", function () {",
+                  "    if (pm.response.to.have.status(200)) {",
+                  "        let token = pm.response.json().auth_token;",
+                  "        pm.environment.set(\"authToken\", token);",
+                  "    }",
+                  "});",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": "http://{{ipAddress}}/api/v1/new",
+            "description": "A user is authorized to access the OpenAPI if they can demonstrate physical access of the Light Panels. Generate an authorization token by: \n\n1. Holding the on-off button for 5-7 seconds untl the LED starts flashing in a pattern.\n2. Sending a POST request to the authorization endpoint within 30 seconds of activating pairing, like this (substituting the IP address and port for your central controller):\n\n`http://192.188.x.x:16021/api/v1/new`\n\nThe result returned will be a 32-character authorization token that you will use in all of your subsequent calls.\n\nRefer to Section 6 of the [Nanoleaf Open API Documentation](http://forum.nanoleaf.me/docs/openapi)."
+          },
+          "response": [
+            {
+              "id": "f4016ff5-0051-46c8-98fc-8d00afc95b8c",
+              "name": "Add a user",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "http://{{ipAddress}}/api/v1/new"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n    \"auth_token\": \"zbp3aHIDoj0Ox2iAr857WMFck58mOBaL\"\n}"
+            }
+          ]
+        },
+        {
+          "_postman_id": "cc5ebd2e-f2b2-4a0b-86b9-e0107556da97",
+          "name": "Delete a user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b8740a35-11ce-4470-a198-4443953d85fd",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Requires an authorization token of an existing user."
+          },
+          "response": [
+            {
+              "id": "0badb1da-5fe6-491f-b22f-e2340163d0d4",
+              "name": "Delete a user",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_postman_id": "c722b0bd-eddf-4e55-9c96-73ca3a8af160",
+      "name": "Get all controller info",
+      "description": null,
+      "item": [
+        {
+          "_postman_id": "4af1567b-e1b4-47d5-85ff-2142043a0c7a",
+          "name": "Get all light controller info",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "68b7880d-2b57-4285-96e1-34df6351b931",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "bc57d99d-9736-4f57-929c-78db7096cfaf",
+              "name": "Get all light controller info",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "827",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"name\":\"Nanoleaf Light Panels 52:c4:ce\",\"serialNo\":\"S18122A0754\",\"manufacturer\":\"Nanoleaf\",\"firmwareVersion\":\"2.3.0\",\"model\":\"NL22\",\"state\":{\"on\":{\"value\":true},\"brightness\":{\"value\":100,\"max\":100,\"min\":0},\"hue\":{\"value\":0,\"max\":360,\"min\":0},\"sat\":{\"value\":0,\"max\":100,\"min\":0},\"ct\":{\"value\":4000,\"max\":6500,\"min\":1200},\"colorMode\":\"effect\"},\"effects\":{\"select\":\"Northern Lights\",\"effectsList\":[\"Color Burst\",\"Flames\",\"Forest\",\"Inner Peace\",\"Nemo\",\"Northern Lights\",\"Romantic\",\"Snowfall\"]},\"panelLayout\":{\"layout\":{\"numPanels\":1,\"sideLength\":150,\"positionData\":[{\"panelId\":186,\"x\":-74,\"y\":43,\"o\":180}]},\"globalOrientation\":{\"value\":0,\"max\":360,\"min\":0}},\"rhythm\":{\"rhythmConnected\":false,\"rhythmActive\":null,\"rhythmId\":null,\"hardwareVersion\":null,\"firmwareVersion\":null,\"auxAvailable\":null,\"rhythmMode\":null,\"rhythmPos\":null}}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_postman_id": "cbbfadae-fa4a-4cdf-933e-1e9d8fbf40d0",
+      "name": "State",
+      "description": "When writing state information, you set the value of a state or operate using increment where applicable. Increment can be positive or negative and will only go to the min or max value.",
+      "item": [
+        {
+          "_postman_id": "4b0facc8-c865-4006-98cb-4c2195a028ad",
+          "name": "On/Off",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "9a5b6fd3-bbc3-4ac2-a2e2-01dcf54d0989",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204: no content\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/on",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state",
+                "on"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c60822ef-2493-454f-9322-ab2b42d016f6",
+              "name": "On/Off",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/on",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state",
+                    "on"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "14",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"value\":true}"
+            }
+          ]
+        },
+        {
+          "_postman_id": "562c79e1-5405-4cd9-9287-13fec5a6bd57",
+          "name": "On/Off - update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b596e742-19d1-45d5-a7ce-569314a7d589",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"on\": {\n    \"value\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "59352682-bb12-4f5a-9eb1-6ed6e004cb3e",
+              "name": "On/Off - update",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"on\": {\n    \"value\": true\n  }\n}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        },
+        {
+          "_postman_id": "797bdeb9-af77-40eb-bc41-230320dcfbdd",
+          "name": "Brightness",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b02559f8-a279-4d58-8fd7-ee375dfb93bd",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/brightness",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state",
+                "brightness"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "15e11dc7-3987-44e9-8ede-3deb84b849c7",
+              "name": "Brightness",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/brightness",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state",
+                    "brightness"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "31",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"value\":100,\"max\":100,\"min\":0}"
+            }
+          ]
+        },
+        {
+          "_postman_id": "2a1a6ec5-19dd-43f2-8ccb-9fc2df9a1502",
+          "name": "Brightness - update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "25f7ba61-583b-41aa-b9c8-1b8a29ce0451",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"brightness\" : {\"value\":100, \"duration\":30}}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Duration field is optional, and specified in seconds."
+          },
+          "response": [
+            {
+              "id": "4c0bb769-9626-43d4-8108-001e390d1dba",
+              "name": "Brightness - update",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"brightness\" : {\"value\":100, \"duration\":30}}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        },
+        {
+          "_postman_id": "d1bbab0d-7f41-466a-817f-eea22d988e2f",
+          "name": "Hue",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "666d9017-a2a2-478a-8931-cef28a431265",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/hue",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state",
+                "hue"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c344604d-757e-4265-af98-4dbe70008aca",
+              "name": "Hue",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/hue",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state",
+                    "hue"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "29",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"value\":0,\"max\":360,\"min\":0}"
+            }
+          ]
+        },
+        {
+          "_postman_id": "b6918f7e-d156-4c80-ac6a-1f429c989c74",
+          "name": "Hue - update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "9aa09750-d124-498f-815e-1a6799030607",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"hue\" : {\"value\":120}}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5cf3a94d-8b13-40fa-be1f-1879ffeaf5e7",
+              "name": "Hue - update",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"hue\" : {\"value\":120}}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        },
+        {
+          "_postman_id": "4299cd10-7dd5-416e-a1cc-55cca7607e39",
+          "name": "Saturation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "d4c38982-3dea-4ec9-81f4-f6c8e1806a7f",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/sat",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state",
+                "sat"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "80154a65-adc4-4e52-968a-a20f026de50c",
+              "name": "Saturation",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/sat",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state",
+                    "sat"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "29",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"value\":0,\"max\":100,\"min\":0}"
+            }
+          ]
+        },
+        {
+          "_postman_id": "857718c3-9d3d-4ae0-9649-ba5daef3afd7",
+          "name": "Saturation - update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "8ea88783-2578-40d1-adfb-bde4fd55f63a",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"sat\" : {\"value\": 20}}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/sat",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state",
+                "sat"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f523a90e-cdfa-483d-b4de-5019e914fb79",
+              "name": "Saturation - update",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"sat\" : {\"value\": 20}}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/sat",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state",
+                    "sat"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        },
+        {
+          "_postman_id": "5efd8097-4780-4a83-b621-6f35a1ec7626",
+          "name": "Color Temperature",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "1bfc6387-378c-4fb5-9f30-160e2af381c3",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/ct",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state",
+                "ct"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "1.5.0:\n\n- Min and max values returned for ct are wrong. They should be 1200-6500, but are returned 0-100."
+          },
+          "response": [
+            {
+              "id": "03016c49-46f7-496d-b4c9-7030179320f0",
+              "name": "Color Temperature",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/ct",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state",
+                    "ct"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "36",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"value\":4000,\"max\":6500,\"min\":1200}"
+            }
+          ]
+        },
+        {
+          "_postman_id": "1c2f7264-ad94-4846-a59c-8f97c7499538",
+          "name": "Color Temperature - update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "ccdd172d-1a36-4155-a2b7-b92f0f96db4b",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"ct\" : {\"value\": 3000}}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "1.5.0:\n\n- Min and max values returned for ct are wrong. They should be 1200-6500, but are returned 0-100."
+          },
+          "response": [
+            {
+              "id": "224383a6-9358-4bac-aaf9-d5a307324c47",
+              "name": "Color Temperature - update",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"ct\" : {\"value\": 3000}}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        },
+        {
+          "_postman_id": "6469515a-de91-44f1-8bc6-4ba827ee89e4",
+          "name": "Color Mode",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b4b572e6-f6b5-4d31-8736-626954b1d578",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/colorMode",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "state",
+                "colorMode"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e30d13f5-740d-4ab1-abf8-ddc2e0a595ed",
+              "name": "Color Mode",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/state/colorMode",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "state",
+                    "colorMode"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "4",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "\"ct\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_postman_id": "e193e990-1c00-4d1c-b6bf-e23b069633aa",
+      "name": "Effects",
+      "description": null,
+      "item": [
+        {
+          "_postman_id": "45cf2e37-45bd-48a3-90f1-4b58c680c38e",
+          "name": "Select",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "a11467eb-fee7-49b1-8a65-8f63d4a06cbf",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects/select",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "effects",
+                "select"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cbef51b9-a22a-4b8b-a9ae-345bfac22228",
+              "name": "Select",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects/select",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "effects",
+                    "select"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "11",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "\"Fireworks\""
+            }
+          ]
+        },
+        {
+          "_postman_id": "94ab52c6-8ab7-4aae-a649-d1de08bd4550",
+          "name": "Select - update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "2fa2339b-9d55-4647-bc1e-1b06d639ed09",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"select\" : \"Snowfall\"}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "effects"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4f665573-e185-4eec-b198-26aad770eb72",
+              "name": "Select - update",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"select\" : \"Snowfall\"}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "effects"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        },
+        {
+          "_postman_id": "07633137-3dd9-41d6-949f-e77b0a9e80eb",
+          "name": "List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "3e311d34-298d-4e7a-bb09-3661f8e09b89",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects/effectsList",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "effects",
+                "effectsList"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "edef2b84-793d-4184-8f05-f515b6296edf",
+              "name": "List",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects/effectsList",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "effects",
+                    "effectsList"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "223",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\"Color Burst\",\"Fireworks\",\"Flames\",\"Forest\",\"Inner Peace\",\"Meteor Shower\",\"Nemo\",\"Northern Lights\",\"Paint Splatter\",\"Pulse Pop Beats\",\"Rhythmic Northern Lights\",\"Ripple\",\"Romantic\",\"Snowfall\",\"Sound Bar\",\"Streaking Notes\"]"
+            }
+          ]
+        },
+        {
+          "_postman_id": "bff185d5-ad6f-4bef-84b6-70cadfa92e20",
+          "name": "Write",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "eaa6069f-7c7b-4482-ad06-70aab0a1242d",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Successful PUT request\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,204]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"write\" : {\"command\" : \"request\", \"animName\" : \"Northern Lights\"}}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "effects"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "556b3726-32bb-4986-84ef-0046b5d44037",
+              "name": "Write",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"write\" : {\"command\" : \"request\", \"animName\" : \"Northern Lights\"}}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/effects",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "effects"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "619",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"animName\":\"Northern Lights\",\"loop\":true,\"palette\":[{\"hue\":227,\"saturation\":100,\"brightness\":99},{\"hue\":182,\"saturation\":100,\"brightness\":100},{\"hue\":125,\"saturation\":100,\"brightness\":93},{\"hue\":62,\"saturation\":100,\"brightness\":100},{\"hue\":31,\"saturation\":100,\"brightness\":100},{\"hue\":2,\"saturation\":100,\"brightness\":100},{\"hue\":307,\"saturation\":100,\"brightness\":100}],\"version\":\"1.0\",\"transTime\":{\"maxValue\":20,\"minValue\":20},\"windowSize\":2,\"flowFactor\":0,\"delayTime\":{\"maxValue\":20,\"minValue\":5},\"colorType\":\"HSB\",\"animType\":\"wheel\",\"explodeFactor\":0,\"brightnessRange\":{\"maxValue\":0,\"minValue\":0},\"direction\":\"left\"}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_postman_id": "f0062d31-dc34-4f67-a996-dcd25e26d8b1",
+      "name": "Panel Layout",
+      "description": null,
+      "item": [
+        {
+          "_postman_id": "701416c8-2660-453c-bcd2-e2b72290171a",
+          "name": "Global orientation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "f03235c1-fa28-4f0c-bc19-a6cea421c89d",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/panelLayout/globalOrientation",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "panelLayout",
+                "globalOrientation"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6c7e8723-4a94-43d0-b2fa-2f94be619d16",
+              "name": "Global orientation",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/panelLayout/globalOrientation",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "panelLayout",
+                    "globalOrientation"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "29",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"value\":0,\"max\":360,\"min\":0}"
+            }
+          ]
+        },
+        {
+          "_postman_id": "064d0e64-26fd-4cd5-99d6-d7ab68a3c66e",
+          "name": "Global orientation - update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "1159211b-71a2-430b-a335-b0e9ecf32a07",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"globalOrientation\" : {\"value\": 120}}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/panelLayout/globalOrientation",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "panelLayout",
+                "globalOrientation"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "adba916d-c2a0-44be-9eb4-80cd9e4c28b4",
+              "name": "Global orientation - update",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"globalOrientation\" : {\"value\": 120}}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/panelLayout/globalOrientation",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "panelLayout",
+                    "globalOrientation"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        },
+        {
+          "_postman_id": "3eef67f5-8793-415e-ab09-53e75a2586c4",
+          "name": "Layout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "357a6c4c-a937-49f4-918f-048e5a3cbf26",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/panelLayout/layout",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "panelLayout",
+                "layout"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "To retrieve the panel layout, send an HTTP GET request like this (inserting your authorization token):\n\n `http:192.188.x.x/api/v1/<auth_token>/panelLayout/layout`"
+          },
+          "response": [
+            {
+              "id": "263e0f7e-de8d-4d1d-9494-d4d9daaba85d",
+              "name": "Layout",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/panelLayout/layout",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "panelLayout",
+                    "layout"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "125",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"numPanels\":3,\"sideLength\":150,\"positionData\":[{\"panelId\":186,\"x\":-74,\"y\":43,\"o\":180},{\"panelId\":55,\"x\":-74,\"y\":129,\"o\":0}]}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_postman_id": "a0b033b9-f986-406f-8a50-75b5e014fe60",
+      "name": "Identify",
+      "description": null,
+      "item": [
+        {
+          "_postman_id": "1799362a-5301-4a70-98f5-e48bdf580fcd",
+          "name": "Identify",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "48aaa5dc-8acd-40ba-9a11-1c590716f07d",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/identify",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "identify"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Causes the panels to flash in unison. This is typically used to help users differentiate between multiple panels."
+          },
+          "response": [
+            {
+              "id": "9fd3dc0b-dd83-4d99-a1ba-69d456c11ebc",
+              "name": "Identify",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/identify",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "identify"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_postman_id": "cc3fe936-fea1-433d-b4d7-7164eb41a3c9",
+      "name": "Rhythm",
+      "description": "The /rhythm Endpoint allows you to get information about the Rhythm and switch the Rhythm mode from microphone to aux input.",
+      "item": [
+        {
+          "_postman_id": "5819dacb-a88d-4e91-9225-249f780169d4",
+          "name": "Rhythm connected",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6ea6d154-92bc-49be-adee-0f08348b5cd6",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmConnected",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "rhythm",
+                "rhythmConnected"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Indicates if the Rhythm is connected to the Light Panels or not."
+          },
+          "response": [
+            {
+              "id": "39f7f894-93b3-498b-a10a-f8decad12bf2",
+              "name": "Rhythm connected - connected",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmConnected",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "rhythm",
+                    "rhythmConnected"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "4",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "true"
+            },
+            {
+              "id": "974aea75-b077-41bc-b450-324bd91f35ce",
+              "name": "Rhythm connected - not connected",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmConnected",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "rhythm",
+                    "rhythmConnected"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "5",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "false"
+            }
+          ]
+        },
+        {
+          "_postman_id": "2bd47af4-0803-4d90-b54e-5a642256539b",
+          "name": "Rhythm active",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "de91826b-60b5-4b48-8fb6-ba385e88f8b2",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmActive",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "rhythm",
+                "rhythmActive"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Indicates if the Rhythm's microphone is currently active or not."
+          },
+          "response": [
+            {
+              "id": "89f6b7ff-1662-49ef-8ecc-99e5c86973b9",
+              "name": "Rhythm active",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmActive",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "rhythm",
+                    "rhythmActive"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "4",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "true"
+            }
+          ]
+        },
+        {
+          "_postman_id": "5fab7603-ce3a-41fd-adf7-da789d780ef9",
+          "name": "Rhythm id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "7e94fd10-a10f-4f57-88bf-c3695c9a9583",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmId",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "rhythm",
+                "rhythmId"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Indicates the Rhythm's Id in the Light Panel system."
+          },
+          "response": [
+            {
+              "id": "3cd54461-e5ed-43d1-b62b-8ee4a469ed29",
+              "name": "Rhythm id",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmId",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "rhythm",
+                    "rhythmId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "3",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "406"
+            }
+          ]
+        },
+        {
+          "_postman_id": "8c67133b-b063-4f04-a01e-49bd7ad709e2",
+          "name": "Hardware version",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "4fcf8750-e00a-4ffe-8112-e6965193fcd7",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/hardwareVersion",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "rhythm",
+                "hardwareVersion"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Indicates the Rhythm's hardware version."
+          },
+          "response": [
+            {
+              "id": "7d216aa7-f911-4714-b2a0-69657fe2a897",
+              "name": "Hardware version",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/hardwareVersion",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "rhythm",
+                    "hardwareVersion"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "5",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "\"1.4\""
+            }
+          ]
+        },
+        {
+          "_postman_id": "b26cc3cd-99e7-4556-a101-5da9ba37d87e",
+          "name": "Firmware version",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "a7b06d87-d5fd-4338-8f55-6390ebf73188",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/firmwareVersion",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "rhythm",
+                "firmwareVersion"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Indicates the Rhythm's firmware version."
+          },
+          "response": [
+            {
+              "id": "a1d8da4e-d215-45f7-b39c-e646582e7668",
+              "name": "Firmware version",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/firmwareVersion",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "rhythm",
+                    "firmwareVersion"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "5",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "\"2.0\""
+            }
+          ]
+        },
+        {
+          "_postman_id": "fe641b77-5f9f-40f4-b384-fec503dbb907",
+          "name": "Aux available",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5d6fb84d-b263-40e2-bf40-f0aeebc577a8",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/auxAvailable",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "rhythm",
+                "auxAvailable"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Indicates if an aux cable (3.5mm) is currently connected to the Rhythm."
+          },
+          "response": [
+            {
+              "id": "b4cb6717-1612-4bbf-be36-29b6640448f6",
+              "name": "Aux available",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/auxAvailable",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "rhythm",
+                    "auxAvailable"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "5",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "false"
+            }
+          ]
+        },
+        {
+          "_postman_id": "100d8b84-ae22-4e6a-aec1-46875b026c38",
+          "name": "Rhythm mode",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "f0df9337-d7c1-454d-b723-c6586ba6976f",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmMode",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "rhythm",
+                "rhythmMode"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Allows the user to control the sound source for the Rhythm. Writing 0 to this field sets the Rhythm's sound source to the microphone, and writing 1 to the field sets the sound source to the aux cable."
+          },
+          "response": [
+            {
+              "id": "1f291856-ce01-4d24-a9a3-2907b66c1d4e",
+              "name": "Rhythm mode",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmMode",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "rhythm",
+                    "rhythmMode"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "1",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "0"
+            }
+          ]
+        },
+        {
+          "_postman_id": "097e998e-e0cd-4a09-96da-c76a97505f6f",
+          "name": "Rhythm mode - update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "c8672a49-bd4e-4d1a-bb5a-d47f528be845",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"rhythmMode\": 1}"
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmMode",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "rhythm",
+                "rhythmMode"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Allows the user to control the sound source for the Rhythm. Writing 0 to this field sets the Rhythm's sound source to the microphone, and writing 1 to the field sets the sound source to the aux cable."
+          },
+          "response": [
+            {
+              "id": "41e30fa0-17b6-4c63-bcb5-79d99ef98526",
+              "name": "Rhythm mode - update",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"rhythmMode\": 1}"
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmMode",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "rhythm",
+                    "rhythmMode"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "0",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": ""
+            }
+          ]
+        },
+        {
+          "_postman_id": "71839658-ff38-4138-956c-4b1f9e38a3bb",
+          "name": "Rhythm positions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "65a85b1f-2323-4429-a934-c9da47802d83",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmPos",
+              "protocol": "http",
+              "host": [
+                "{{ipAddress}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                ":auth_token",
+                "rhythm",
+                "rhythmPos"
+              ],
+              "variable": [
+                {
+                  "key": "auth_token",
+                  "value": "{{authToken}}"
+                }
+              ]
+            },
+            "description": "Indicates the position and orientation of the Rhythm in the Light Panels' layout."
+          },
+          "response": [
+            {
+              "id": "700edb36-9759-4a14-86d5-8ea6d766be59",
+              "name": "Rhythm positions",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://{{ipAddress}}/api/v1/:auth_token/rhythm/rhythmPos",
+                  "protocol": "http",
+                  "host": [
+                    "{{ipAddress}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    ":auth_token",
+                    "rhythm",
+                    "rhythmPos"
+                  ],
+                  "variable": [
+                    {
+                      "key": "auth_token",
+                      "value": "{{authToken}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Length",
+                  "value": "22",
+                  "name": "Content-Length",
+                  "description": "The length of the response body in octets (8-bit bytes)"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "name": "Content-Type",
+                  "description": "The mime type of this content"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\"x\":0,\"y\":173,\"o\":60}"
+            }
+          ]
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "3f269797-6619-429b-ae01-222fee74de00",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "7ca85b21-a9de-44a0-ba3d-ff44eb6625a3",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "d8d3d88a-a85a-472b-afe7-7c75f8e7216c",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "3bd7f475-785f-4864-858b-606ebb7a1d24",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

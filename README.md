@@ -19,9 +19,9 @@ The result returned will be a 32-character authorization token that you will use
 
 ### Quickstart
 
-[Update the Postman environment](https://www.getpostman.com/docs/v6/postman/environments_and_globals/manage_environments#editing-an-active-environment) with your IP and port.
+1. [Update the Postman environment](https://www.getpostman.com/docs/v6/postman/environments_and_globals/manage_environments#editing-an-active-environment) with your IP and port.
+2. If you already have an authorization token, update the Postman environment with your token. Otherwise, you will need to use the [Add a user](https://documenter.getpostman.com/view/1559645/RW1gEcCH#edd41442-c94f-49dc-977b-8180be92e018) `POST` request to generate an authorization token.
 
-1. If you already have an authorization token, update the Postman environment with your token. Otherwise, you will need to use the [Add a user](https://documenter.getpostman.com/view/1559645/RW1gEcCH#edd41442-c94f-49dc-977b-8180be92e018) `POST` request to generate an authorization token.
-2. In this Postman collection, I added a Quickstart folder to group a handful of requests to demonstrate a possible workflow (visible in the pre-request and test script sections). The remaining folders are replicated from the [Nanoleaf Open API Reference](http://forum.nanoleaf.me/docs/openapi). For more details and to see example responses, check out the [collection documentation](https://documenter.getpostman.com/view/1559645/RW1gEcCH).
+In this Postman collection, I added a Quickstart folder to group a handful of requests to demonstrate a possible workflow (visible in the pre-request and test script sections). The remaining folders are replicated from the [Nanoleaf Open API Reference](http://forum.nanoleaf.me/docs/openapi). For more details and to see example responses, check out the [collection documentation](https://documenter.getpostman.com/view/1559645/RW1gEcCH).
 
 ![[nanoleaf documentation](https://s3.amazonaws.com/postman-static-getpostman-com/postman-docs/nanoleaf-documentation.png)](https://s3.amazonaws.com/postman-static-getpostman-com/postman-docs/nanoleaf-documentation.png)

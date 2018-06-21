@@ -15,6 +15,10 @@ Click the Run in Postman button below to import this Postman Collection and Envi
 
 `http://192.188.x.x:16021/api/v1/new`
 
+> **Finding your IP:** The IP address of your Nanoleaf can be found using your router. Once you have the Nanoleaf connected to your WiFi, go to your router webpage and browse the devices connected to your network. Once you find your Nanoleaf, you can see the IP assigned to the device. 
+
+> Remember if you're accessing the Nanoleaf at a local IP address, like when your router assigns a local IP address to the connected devices, both the Nanoleaf device and the client accessing the Nanoleaf (Postman) must be on the same local network. For example, both the Nanoleaf and laptop with Postman should be connected to the same WiFi network.
+
 The result returned will be a 32-character authorization token that you will use in all of your subsequent calls.
 
 ### Quickstart
